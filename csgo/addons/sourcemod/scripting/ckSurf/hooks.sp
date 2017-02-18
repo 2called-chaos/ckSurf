@@ -235,12 +235,12 @@ public Action Say_Hook(int client, const char[] command, int argc)
 		}
 
 		// !s and !stage commands
-		if (StrContains(sText, "!s", false) == 0 || StrContains(sText, "!stage", false) == 0)
-			return Plugin_Handled;
+		// if (StrContains(sText, "!s", false) == 0 || StrContains(sText, "!stage", false) == 0)
+		// 	return Plugin_Handled;
 
-		// !b and !bonus commands
-		if (StrContains(sText, "!b", false) == 0 || StrContains(sText, "!bonus", false) == 0)
-			return Plugin_Handled;
+		// // !b and !bonus commands
+		// if (StrContains(sText, "!b", false) == 0 || StrContains(sText, "!bonus", false) == 0)
+		// 	return Plugin_Handled;
 
 		//empty message
 		if (StrEqual(sText, " ") || !sText[0])

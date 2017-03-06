@@ -3136,3 +3136,26 @@ void resetZone(int zoneIndex)
 	g_mapZones[zoneIndex][Team] = 0;
 	g_mapZones[zoneIndex][zoneGroup] = 0;
 }
+
+void SetPlayerVisible(int client)
+{
+	int iAlpha = GetConVarInt(g_hCvarPlayerOpacity);
+	if (iAlpha == 255)
+	{
+		SetEntityRenderMode(client, RENDER_NORMAL);
+	}
+	// else if (iAlpha == 0)
+	// {
+	// 	SetEntityRenderMode(client, RENDER_NONE);
+	// }
+	else
+	{
+		SetEntityRenderMode(client, RENDER_TRANSCOLOR);
+		Entity_SetRenderColor(client, -1, -1, -1, iAlpha);
+	}
+}
+
+void SetPlayerInvisible(int client)
+{
+	SetEntityRenderMode(client, RENDER_NONE);
+}

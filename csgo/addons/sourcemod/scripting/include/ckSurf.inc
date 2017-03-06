@@ -9,7 +9,7 @@
  * Checks clients timer status
  *
  * @param client    Client's id
- * @return          True / False 
+ * @return          True / False
  */
 native bool:ckSurf_GetTimerStatus(client);
 
@@ -118,7 +118,7 @@ public __pl_ckSurf_SetNTVOptional()
 {
 	MarkNativeAsOptional("ckSurf_GetTimerStatus");
 	MarkNativeAsOptional("ckSurf_StopTimer");
-	MarkNativeAsOptional("ckSurf_EmulateStartButtonPress");	
+	MarkNativeAsOptional("ckSurf_EmulateStartButtonPress");
 	MarkNativeAsOptional("ckSurf_EmulateStopButtonPress");
 	MarkNativeAsOptional("ckSurf_GetCurrentTime");
 	MarkNativeAsOptional("ckSurf_ClientIsVIP");

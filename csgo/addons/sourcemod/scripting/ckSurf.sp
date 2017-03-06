@@ -138,35 +138,35 @@
 
 enum FrameInfo
 {
-	playerButtons = 0, 
-	playerImpulse, 
-	Float:actualVelocity[3], 
-	Float:predictedVelocity[3], 
-	Float:predictedAngles[2], 
-	CSWeaponID:newWeapon, 
-	playerSubtype, 
-	playerSeed, 
-	additionalFields, 
-	pause, 
+	playerButtons = 0,
+	playerImpulse,
+	Float:actualVelocity[3],
+	Float:predictedVelocity[3],
+	Float:predictedAngles[2],
+	CSWeaponID:newWeapon,
+	playerSubtype,
+	playerSeed,
+	additionalFields,
+	pause,
 }
 
 enum AdditionalTeleport
 {
-	Float:atOrigin[3], 
-	Float:atAngles[3], 
-	Float:atVelocity[3], 
+	Float:atOrigin[3],
+	Float:atAngles[3],
+	Float:atVelocity[3],
 	atFlags
 }
 
 enum FileHeader
 {
-	FH_binaryFormatVersion = 0, 
-	String:FH_Time[32], 
-	String:FH_Playername[32], 
-	FH_Checkpoints, 
-	FH_tickCount, 
-	Float:FH_initialPosition[3], 
-	Float:FH_initialAngles[3], 
+	FH_binaryFormatVersion = 0,
+	String:FH_Time[32],
+	String:FH_Playername[32],
+	FH_Checkpoints,
+	FH_tickCount,
+	Float:FH_initialPosition[3],
+	Float:FH_initialAngles[3],
 	Handle:FH_frames
 }
 
@@ -175,11 +175,11 @@ enum MapZone
 	zoneId,  				// ID within the map
 	zoneType,  				// Types: Start(1), End(2), Stage(3), Checkpoint(4), Speed(5), TeleToStart(6), Validator(7), Chekcer(8), Stop(0)
 	zoneTypeId, 			// ID of the same type eg. Start-1, Start-2, Start-3...
-	Float:PointA[3], 
-	Float:PointB[3], 
+	Float:PointA[3],
+	Float:PointB[3],
 	Float:CenterPoint[3],
-	String:zoneName[128], 
-	zoneGroup, 
+	String:zoneName[128],
+	zoneGroup,
 	Vis,
 	Team
 }
@@ -199,12 +199,12 @@ enum SkillGroup
 =            Plugin Info            =
 ===================================*/
 
-public Plugin myinfo = 
+public Plugin myinfo =
 {
-	name = "ckSurf", 
-	author = "Elzi", 
-	description = "#clan.kikkeli's Surf Plugin", 
-	version = VERSION, 
+	name = "ckSurf",
+	author = "Elzi",
+	description = "#clan.kikkeli's Surf Plugin",
+	version = VERSION,
 	url = ""
 };
 
@@ -222,7 +222,7 @@ int g_Stage[MAXZONEGROUPS][MAXPLAYERS + 1];						// Which stage is the client in
 bool g_bhasStages; 												// Does the map have stages
 
 /*----------  Spawn locations  ----------*/
-float g_fSpawnLocation[MAXZONEGROUPS][3];						// Spawn coordinates 
+float g_fSpawnLocation[MAXZONEGROUPS][3];						// Spawn coordinates
 float g_fSpawnAngle[MAXZONEGROUPS][3];							// Spawn angle
 bool g_bGotSpawnLocation[MAXZONEGROUPS]; 						// Does zonegroup have a spawn location
 
@@ -261,7 +261,7 @@ char g_szUsedVoteExtend[MAXPLAYERS+1][32]; 						// SteamID's which triggered ex
 int g_VoteExtends = 0; 											// How many extends have happened in current map
 ConVar g_hVoteExtendTime; 										// Extend time CVar
 ConVar g_hMaxVoteExtends; 										// Extend max count CVar
-ConVar g_hMaxVoteExtendsUniquePlayers; 							// Extend max votes by unique players CVar 
+ConVar g_hMaxVoteExtendsUniquePlayers; 							// Extend max votes by unique players CVar
 
 /*----------  Bonus variables  ----------*/
 char g_szBonusFastest[MAXZONEGROUPS][MAX_NAME_LENGTH]; 			// Name of the #1 in the current maps bonus
@@ -333,7 +333,7 @@ int g_ClientSelectedPoint[MAXPLAYERS + 1];						// Currently selected point
 int g_CurrentZoneTypeId[MAXPLAYERS + 1];						// Currently selected zone's type ID
 bool g_ClientRenamingZone[MAXPLAYERS + 1];						// Is client renaming zone?
 int beamColorT[] =  { 255, 0, 0, 255 };							// Zone team colors TODO: remove
-int beamColorCT[] =  { 0, 0, 255, 255 };				
+int beamColorCT[] =  { 0, 0, 255, 255 };
 int beamColorN[] =  { 255, 255, 0, 255 };
 int beamColorM[] =  { 0, 255, 0, 255 };
 char g_szZoneDefaultNames[ZONEAMOUNT][128] =  { "Stop", "Start", "End", "Stage", "Checkpoint", "SpeedStart", "TeleToStart", "Validator", "Checker" }; // Default zone names
@@ -368,7 +368,7 @@ ConVar g_hZonesToDisplay = null; 								// Which zones are displayed
 ConVar g_hChecker; 												// Zone refresh rate
 Handle g_hZoneTimer = INVALID_HANDLE;
 //Zone Colors
-int g_iZoneColors[ZONEAMOUNT+2][4];								// ZONE COLOR TYPES: Stop(0), Start(1), End(2), BonusStart(3), BonusEnd(4), Stage(5), 
+int g_iZoneColors[ZONEAMOUNT+2][4];								// ZONE COLOR TYPES: Stop(0), Start(1), End(2), BonusStart(3), BonusEnd(4), Stage(5),
 char g_szZoneColors[ZONEAMOUNT+2][24];							// Checkpoint(6), Speed(7), TeleToStart(8), Validator(9), Chekcer(10)
 ConVar g_hzoneStartColor = null;
 ConVar g_hzoneEndColor = null;
@@ -446,7 +446,7 @@ ConVar g_hBonusPreSpeed = null; 								// Bonus start zone speed cap
 ConVar g_hSoundEnabled = null; 									// Enable timer start sound
 ConVar g_hSoundPath = null;										// Define start sound
 //char sSoundPath[64];
-ConVar g_hSpawnToStartZone = null; 								// Teleport on spawn to start zone 
+ConVar g_hSpawnToStartZone = null; 								// Teleport on spawn to start zone
 ConVar g_hAnnounceRank = null; 									// Min rank to announce in chat
 ConVar g_hForceCT = null; 										// Force players CT
 ConVar g_hChatSpamFilter = null; 								// Chat spam limiter
@@ -545,7 +545,7 @@ float g_fInitialAngles[MAXPLAYERS + 1][3]; 						// Replay start angle
 bool g_bValidTeleportCall[MAXPLAYERS + 1]; 						// Is teleport valid?
 bool g_bNewReplay[MAXPLAYERS + 1]; 								// Don't allow starting a new run if saving a record run
 bool g_bNewBonus[MAXPLAYERS + 1]; 								// Don't allow starting a new run if saving a record run
-int g_BotMimicRecordTickCount[MAXPLAYERS + 1] =  { 0, ... }; 
+int g_BotMimicRecordTickCount[MAXPLAYERS + 1] =  { 0, ... };
 int g_BotActiveWeapon[MAXPLAYERS + 1] =  { -1, ... };
 int g_CurrentAdditionalTeleportIndex[MAXPLAYERS + 1];
 int g_RecordedTicks[MAXPLAYERS + 1];
@@ -553,7 +553,7 @@ int g_RecordPreviousWeapon[MAXPLAYERS + 1];
 int g_OriginSnapshotInterval[MAXPLAYERS + 1];
 int g_BotMimicTick[MAXPLAYERS + 1] =  { 0, ... };
 int g_RecordBot = -1; 											// Record bot client ID
-int g_BonusBot = -1; 											// Bonus bot client ID 
+int g_BonusBot = -1; 											// Bonus bot client ID
 int g_InfoBot = -1; 											// Info bot client ID
 bool g_bReplayAtEnd[MAXPLAYERS + 1]; 							// Replay is at the end
 float g_fReplayRestarted[MAXPLAYERS + 1]; 						// Make replay stand still for long enough for trail to die
@@ -624,7 +624,7 @@ float g_fProfileMenuLastQuery[MAXPLAYERS + 1]; 					// Last time profile was que
 int g_MenuLevel[MAXPLAYERS + 1];								// Tracking menu level
 int g_OptionsMenuLastPage[MAXPLAYERS + 1];						// Weird options menu tricker TODO: wtf
 char g_pr_szrank[MAXPLAYERS + 1][512];							// Client's rank string displayed in !profile
-char g_szProfileName[MAXPLAYERS + 1][MAX_NAME_LENGTH];			// !Profile name 
+char g_szProfileName[MAXPLAYERS + 1][MAX_NAME_LENGTH];			// !Profile name
 char g_szProfileSteamId[MAXPLAYERS + 1][32];
 // Admin
 int g_AdminMenuFlag; 											// Admin flag required for !ckadmin
@@ -632,7 +632,7 @@ ConVar g_hAdminMenuFlag = null;
 Handle g_hAdminMenu = null; 									// Add !ckadmin to !admin
 int g_AdminMenuLastPage[MAXPLAYERS + 1]; 						// Weird admin menu trickery TODO: wtf
 
-/*----------  Challenge variables  ----------*/ 
+/*----------  Challenge variables  ----------*/
 /**
 
 	TODO:
@@ -708,22 +708,22 @@ char EntityList[][] =  // Disable entities that often break maps
 
 char RadioCMDS[][] =  // Disable radio commands
 {
-	"coverme", "takepoint", "holdpos", "regroup", "followme", "takingfire", "go", "fallback", "sticktog", 
-	"getinpos", "stormfront", "report", "roger", "enemyspot", "needbackup", "sectorclear", "inposition", 
-	"reportingin", "getout", "negative", "enemydown", "cheer", "thanks", "nice", "compliment" 
+	"coverme", "takepoint", "holdpos", "regroup", "followme", "takingfire", "go", "fallback", "sticktog",
+	"getinpos", "stormfront", "report", "roger", "enemyspot", "needbackup", "sectorclear", "inposition",
+	"reportingin", "getout", "negative", "enemydown", "cheer", "thanks", "nice", "compliment"
 };
 
 int RGB_COLORS[][] = // Store defined RGB colors in an array
 {
 	RGB_GREEN, RGB_RED, RGB_DARKRED, RGB_BLUE, RGB_LIGHTBLUE, RGB_DARKBLUE, RBG_YELLOW, RGB_GREENYELLOW,
 	RGB_PURPLE, RGB_MAGENTA, RGB_PINK, RGB_WHITE, RGB_CYAN, RGB_SPRINGGREEN, RGB_OLIVE, RGB_ORANGE,
-	RGB_GREY, RGB_DARKGREY 
+	RGB_GREY, RGB_DARKGREY
 };
 
 char RGB_COLOR_NAMES[][] =  // Store RGB color names in an array also
 {
 	"Green", "Red", "Darkred", "Blue", "Lightblue", "Darkblue", "Yellow", "Greenyellow", "Purple",
-	"Magenta", "Pink", "White", "Cyan", "Springgreen", "Olive", "Orange", "Grey", "Darkgrey" 
+	"Magenta", "Pink", "White", "Cyan", "Springgreen", "Olive", "Orange", "Grey", "Darkgrey"
 };
 
 
@@ -760,7 +760,7 @@ public void OnLibraryAdded(const char[] name)
 		g_bMapChooser = true;
 	if (tmp != null)
 		CloseHandle(tmp);
-	
+
 	//botmimic 2
 	if (StrEqual(name, "dhooks") && g_hTeleport == null)
 	{
@@ -772,7 +772,7 @@ public void OnLibraryAdded(const char[] name)
 		CloseHandle(hGameData);
 		if (iOffset == -1)
 			return;
-		
+
 		g_hTeleport = DHookCreate(iOffset, HookType_Entity, ReturnType_Void, ThisPointer_CBaseEntity, DHooks_OnTeleport);
 		if (g_hTeleport == null)
 			return;
@@ -781,7 +781,7 @@ public void OnLibraryAdded(const char[] name)
 		DHookAddParam(g_hTeleport, HookParamType_VectorPtr);
 		if (GetEngineVersion() == Engine_CSGO)
 			DHookAddParam(g_hTeleport, HookParamType_Bool);
-		
+
 		for (int i = 1; i <= MaxClients; i++)
 		{
 			if (IsClientInGame(i))
@@ -804,8 +804,8 @@ public void OnPluginEnd()
 			OnClientDisconnect(x);
 		}
 	}
-	
-	
+
+
 	//set server convars back to default
 	ServerCommand("sm_cvar sv_enablebunnyhopping 0;sv_friction 5.2;sv_accelerate 5.5;sv_airaccelerate 10;sv_maxvelocity 2000;sv_staminajumpcost .08;sv_staminalandcost .050");
 	ServerCommand("mp_respawn_on_death_ct 0;mp_respawn_on_death_t 0;mp_respawnwavetime_ct 10.0;mp_respawnwavetime_t 10.0;bot_zombie 0;mp_ignore_round_win_conditions 0");
@@ -825,7 +825,7 @@ public void OnLibraryRemoved(const char[] name)
 public void OnMapStart()
 {
 	hasStarted = true;
-	
+
 	// Get mapname
 	GetCurrentMap(g_szMapName, 128);
 	// Load spawns
@@ -847,7 +847,7 @@ public void OnMapStart()
 	* 8. Calculate average run time (db_CalcAvgRunTime)
 	* 9. Calculate averate bonus time (db_CalcAvgRunTimeBonus)
 	* 10. Calculate player count (db_CalculatePlayerCount)
-	* 11. Calculate player count with points (db_CalculatePlayersCountGreater0) 
+	* 11. Calculate player count with points (db_CalculatePlayersCountGreater0)
 	* 12. Get spawn locations (db_selectSpawnLocations)
 	* 13. Clear latest records (db_ClearLatestRecords)
 	* 14. Get dynamic timelimit (db_GetDynamicTimelimit)
@@ -864,14 +864,14 @@ public void OnMapStart()
 
 	//sv_pure 1 could lead to problems with the ckSurf models
 	ServerCommand("sv_pure 0");
-	
+
 	//reload language files
 	LoadTranslations("ckSurf.phrases");
-	
+
 	// load configs
 	loadHiddenChatCommands();
 	loadCustomTitles();
-	
+
 	CheatFlag("bot_zombie", false, true);
 	for (int i = 0; i < MAXZONEGROUPS; i++)
 	{
@@ -879,7 +879,7 @@ public void OnMapStart()
 		g_fBonusFastest[i] = 9999999.0;
 		g_bCheckpointRecordFound[i] = false;
 	}
-	
+
 	//precache
 	InitPrecache();
 	SetCashState();
@@ -890,24 +890,24 @@ public void OnMapStart()
 	CreateTimer(60.0, AttackTimer, INVALID_HANDLE, TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT);
 	CreateTimer(600.0, PlayerRanksTimer, INVALID_HANDLE, TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT);
 	g_hZoneTimer = CreateTimer(GetConVarFloat(g_hChecker), BeamBoxAll, _, TIMER_REPEAT);
-		
+
 	//AutoBhop?
 	if (GetConVarBool(g_hAutoBhopConVar))
 		g_bAutoBhop = true;
 	else
 		g_bAutoBhop = false;
-	
-	
+
+
 	//main.cfg & replays
 	CreateTimer(1.0, DelayedStuff, INVALID_HANDLE, TIMER_FLAG_NO_MAPCHANGE);
-	
-	
+
+
 	if (g_bLateLoaded)
 		OnAutoConfigsBuffered();
-	
+
 	g_Advert = 0;
 	CreateTimer(180.0, AdvertTimer, INVALID_HANDLE, TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT);
-	
+
 	int iEnt;
 	for (int i = 0; i < sizeof(EntityList); i++)
 	{
@@ -917,7 +917,7 @@ public void OnMapStart()
 			AcceptEntityInput(iEnt, "Kill");
 		}
 	}
-	
+
 	// PushFix by Mev, George, & Blacky
 	// https://forums.alliedmods.net/showthread.php?t=267131
 	iEnt = -1;
@@ -925,9 +925,9 @@ public void OnMapStart()
 	{
 		SDKHook(iEnt, SDKHook_Touch, OnTouchPushTrigger);
 	}
-	
+
 	//OnConfigsExecuted();
-		
+
 	// Set default values
 	g_insertingInformation = false;
 	g_fMapStartTime = GetGameTime();
@@ -944,7 +944,7 @@ public void OnMapEnd()
 	g_bServerDataLoaded = false;
 	for (int i = 0; i < MAXZONEGROUPS; i++)
 		Format(g_sTierString[i], 512, "");
-	
+
 	g_RecordBot = -1;
 	g_BonusBot = -1;
 	db_Cleanup();
@@ -960,7 +960,7 @@ public void OnMapEnd()
 	if (g_hBotTrail[1] != null)
 		CloseHandle(g_hBotTrail[1]);
 	g_hBotTrail[1] = null;
-	
+
 	Format(g_szMapName, sizeof(g_szMapName), "");
 }
 
@@ -974,7 +974,7 @@ public void OnConfigsExecuted()
 	// Count the amount of bonuses and then set skillgroups
 	if (!g_bRenaming && !g_bInTransactionChain)
 		db_selectBonusCount();
-	
+
 	ServerCommand("sv_pure 0");
 
 	if (GetConVarBool(g_hAllowRoundEndCvar))
@@ -1001,8 +1001,8 @@ public void OnAutoConfigsBuffered()
 	int lastPiece = ExplodeString(szMap, "/", mapPieces, sizeof(mapPieces), sizeof(mapPieces[]));
 	Format(szMap, sizeof(szMap), "%s", mapPieces[lastPiece - 1]);
 	ExplodeString(szMap, "_", szPrefix, 2, 32);
-	
-	
+
+
 	//map config
 	char szPath[256];
 	Format(szPath, sizeof(szPath), "sourcemod/ckSurf/map_types/%s_.cfg", szPrefix[0]);
@@ -1018,10 +1018,10 @@ public void OnClientPutInServer(int client)
 {
 	if (!IsValidClient(client))
 		return;
-	
+
 	//defaults
 	SetClientDefaults(client);
-	
+
 	//SDKHooks
 	SDKHook(client, SDKHook_SetTransmit, Hook_SetTransmit);
 	SDKHook(client, SDKHook_PostThinkPost, Hook_PostThinkPost);
@@ -1031,7 +1031,7 @@ public void OnClientPutInServer(int client)
 	SDKHook(client, SDKHook_Think, OnPlayerThink);
 	SDKHook(client, SDKHook_PostThink, OnPlayerThink);
 	SDKHook(client, SDKHook_PostThinkPost, OnPlayerThink);
-	
+
 	if (IsFakeClient(client))
 	{
 		g_hRecordingAdditionalTeleport[client] = CreateArray(view_as<int>(AdditionalTeleport));
@@ -1040,32 +1040,32 @@ public void OnClientPutInServer(int client)
 	}
 	else
 		g_MVPStars[client] = 0;
-	
+
 	//client country
 	GetCountry(client);
-	
+
 	if (LibraryExists("dhooks"))
 		DHookEntity(g_hTeleport, false, client);
-	
+
 	//get client steamID
 	GetClientAuthId(client, AuthId_Steam2, g_szSteamID[client], MAX_NAME_LENGTH, true);
-	
+
 	// ' char fix
 	FixPlayerName(client);
-	
+
 	//position restoring
 	if (GetConVarBool(g_hcvarRestore) && !g_bRenaming && !g_bInTransactionChain)
 		db_selectLastRun(client);
-	
+
 	//console info
 	PrintConsoleInfo(client);
-	
+
 	if (g_bLateLoaded && IsPlayerAlive(client))
 		PlayerSpawn(client);
-	
+
 	if (g_bTierFound[0])
 		AnnounceTimer[client] = CreateTimer(20.0, AnnounceMap, client, TIMER_FLAG_NO_MAPCHANGE);
-	
+
 	if (!g_bRenaming && !g_bInTransactionChain && g_bServerDataLoaded && !g_bSettingsLoaded[client] && !g_bLoadingSettings[client])
 	{
 		/**
@@ -1088,7 +1088,7 @@ public void OnClientAuthorized(int client)
 {
 	if (!hasStarted)
 		OnMapStart();
-		
+
 	if (GetConVarBool(g_hConnectMsg) && !IsFakeClient(client))
 	{
 		char s_Country[32], s_clientName[32], s_address[32];
@@ -1099,20 +1099,20 @@ public void OnClientAuthorized(int client)
 		if (!strcmp(s_Country, NULL_STRING))
 			Format(s_Country, 100, "Unknown", s_Country);
 		else
-			if (StrContains(s_Country, "United", false) != -1 || 
-			StrContains(s_Country, "Republic", false) != -1 || 
-			StrContains(s_Country, "Federation", false) != -1 || 
-			StrContains(s_Country, "Island", false) != -1 || 
-			StrContains(s_Country, "Netherlands", false) != -1 || 
-			StrContains(s_Country, "Isle", false) != -1 || 
-			StrContains(s_Country, "Bahamas", false) != -1 || 
-			StrContains(s_Country, "Maldives", false) != -1 || 
-			StrContains(s_Country, "Philippines", false) != -1 || 
+			if (StrContains(s_Country, "United", false) != -1 ||
+			StrContains(s_Country, "Republic", false) != -1 ||
+			StrContains(s_Country, "Federation", false) != -1 ||
+			StrContains(s_Country, "Island", false) != -1 ||
+			StrContains(s_Country, "Netherlands", false) != -1 ||
+			StrContains(s_Country, "Isle", false) != -1 ||
+			StrContains(s_Country, "Bahamas", false) != -1 ||
+			StrContains(s_Country, "Maldives", false) != -1 ||
+			StrContains(s_Country, "Philippines", false) != -1 ||
 			StrContains(s_Country, "Vatican", false) != -1)
 		{
 			Format(s_Country, 100, "The %s", s_Country);
 		}
-		
+
 		if (StrEqual(s_Country, "Unknown", false) || StrEqual(s_Country, "Localhost", false))
 		{
 			for (int i = 1; i <= MaxClients; i++)
@@ -1148,7 +1148,7 @@ public void OnClientDisconnect(int client)
 		else
 			g_fPlayerLastTime[client] = g_fCurrentRunTime[client];
 	}
-	
+
 	SDKUnhook(client, SDKHook_SetTransmit, Hook_SetTransmit);
 	SDKUnhook(client, SDKHook_PostThinkPost, Hook_PostThinkPost);
 	SDKUnhook(client, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
@@ -1157,7 +1157,7 @@ public void OnClientDisconnect(int client)
 	SDKUnhook(client, SDKHook_Think, OnPlayerThink);
 	SDKUnhook(client, SDKHook_PostThink, OnPlayerThink);
 	SDKUnhook(client, SDKHook_PostThinkPost, OnPlayerThink);
-	
+
 	if (client == g_RecordBot)
 	{
 		StopPlayerMimic(client);
@@ -1170,20 +1170,20 @@ public void OnClientDisconnect(int client)
 		g_BonusBot = -1;
 		return;
 	}
-	
+
 	// Stop trail
 	g_bTrailOn[client] = false;
-	
-	
-	//Database	
+
+
+	//Database
 	if (IsValidClient(client) && !g_bRenaming)
 	{
 		if (!g_bIgnoreZone[client] && !g_bPracticeMode[client])
 			db_insertLastPosition(client, g_szMapName, g_Stage[g_iClientInZone[client][2]][client], g_iClientInZone[client][2]);
-		
+
 		db_updatePlayerOptions(client);
 	}
-	
+
 	// Stop recording
 	if (g_hRecording[client] != null)
 		StopRecording(client);
@@ -1345,7 +1345,7 @@ public void OnSettingChanged(Handle convar, const char[] oldValue, const char[] 
 			for (int client = 1; client <= MAXPLAYERS; client++)
 				if (IsValidEntity(client))
 					SetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 2, 4, true);
-			
+
 		}
 		else
 		{
@@ -1617,7 +1617,7 @@ public void OnSettingChanged(Handle convar, const char[] oldValue, const char[] 
 		AdminFlag flag;
 		bool validFlag;
 		validFlag = FindFlagByChar(newValue[0], flag);
-		
+
 		if (!validFlag)
 		{
 			PrintToServer("[ckSurf] Invalid flag for ck_zonemenu_flag");
@@ -1630,7 +1630,7 @@ public void OnSettingChanged(Handle convar, const char[] oldValue, const char[] 
 		AdminFlag flag;
 		bool validFlag;
 		validFlag = FindFlagByChar(newValue[0], flag);
-		
+
 		if (!validFlag)
 		{
 			PrintToServer("[ckSurf] Invalid flag for ck_adminmenu_flag");
@@ -1639,16 +1639,16 @@ public void OnSettingChanged(Handle convar, const char[] oldValue, const char[] 
 		else
 			g_AdminMenuFlag = FlagToBit(flag);
 	}
-	
+
 	if (g_hZoneTimer != INVALID_HANDLE)
 	{
 		KillTimer(g_hZoneTimer);
 		g_hZoneTimer = INVALID_HANDLE;
 	}
-	
-	
+
+
 	g_hZoneTimer = CreateTimer(GetConVarFloat(g_hChecker), BeamBoxAll, _, TIMER_REPEAT);
-	
+
 }
 /*
 public Action Event_ReloadMap(Handle Timer)
@@ -1666,29 +1666,29 @@ public Action Event_ReloadMap(Handle Timer)
 public void OnPluginStart()
 {
 	g_bServerDataLoaded = false;
-	
+
 	//linux late-loading fix
 	g_cvar_sv_hibernate_when_empty = FindConVar("sv_hibernate_when_empty");
 	g_cvar_sv_autobunnyhopping = FindConVar("sv_autobunnyhopping");
 	SetConVarBool(g_cvar_sv_autobunnyhopping, false);
-	
-	if (GetConVarInt(g_cvar_sv_hibernate_when_empty) == 1) 
+
+	if (GetConVarInt(g_cvar_sv_hibernate_when_empty) == 1)
 	{
 		SetConVarInt(g_cvar_sv_hibernate_when_empty, 0);
 		//g_useHibernate = true;
 	}
 
 	//CreateTimer(60.0, Event_ReloadMap);
-	
-	
+
+
 	//Get Server Tickate
 	g_Server_Tickrate = RoundFloat(1 / GetTickInterval());
-	
+
 	//language file
 	LoadTranslations("ckSurf.phrases");
-	
+
 	CreateConVar("ckSurf_version", VERSION, "ckSurf Version.", FCVAR_DONTRECORD | FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
-	
+
 	g_hConnectMsg = CreateConVar("ck_connect_msg", "1", "on/off - Enables a player connect message with country", FCVAR_NOTIFY, true, 0.0, true, 1.0);
 	g_hAllowRoundEndCvar = CreateConVar("ck_round_end", "0", "on/off - Allows to end the current round", FCVAR_NOTIFY, true, 0.0, true, 1.0);
 	g_hDisconnectMsg = CreateConVar("ck_disconnect_msg", "1", "on/off - Enables a player disconnect message in chat", FCVAR_NOTIFY, true, 0.0, true, 1.0);
@@ -1785,13 +1785,13 @@ public void OnPluginStart()
 	szRBotColor = "";
 	GetConVarString(g_hBonusBotColor, szRBotColor, 256);
 	GetRGBColor(1, szRBotColor);
-	
+
 	g_hReplayBotTrailColor = CreateConVar("ck_replay_bot_trail_color", "52 91 248", "The trail color for the replay bot - Format: \"red green blue\" from 0 - 255.", FCVAR_NOTIFY);
 	HookConVarChange(g_hReplayBotTrailColor, OnSettingChanged);
 	char szTrailColor[24];
 	GetConVarString(g_hReplayBotTrailColor, szTrailColor, 24);
 	StringRGBtoInt(szTrailColor, g_ReplayBotTrailColor);
-	
+
 	g_hBonusBotTrailColor = CreateConVar("ck_bonus_bot_trail_color", "255 255 20", "The trail color for the bonus bot - Format: \"red green blue\" from 0 - 255.", FCVAR_NOTIFY);
 	HookConVarChange(g_hBonusBotTrailColor, OnSettingChanged);
 	szTrailColor = "";
@@ -1802,59 +1802,59 @@ public void OnPluginStart()
 	GetConVarString(g_hzoneStartColor, g_szZoneColors[1], 24);
 	StringRGBtoInt(g_szZoneColors[1], g_iZoneColors[1]);
 	HookConVarChange(g_hzoneStartColor, OnSettingChanged);
-	
+
 	g_hzoneEndColor = CreateConVar("ck_zone_endcolor", "255 000 000", "The color of END zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneEndColor, g_szZoneColors[2], 24);
 	StringRGBtoInt(g_szZoneColors[2], g_iZoneColors[2]);
 	HookConVarChange(g_hzoneEndColor, OnSettingChanged);
-	
+
 	g_hzoneCheckerColor = CreateConVar("ck_zone_checkercolor", "255 255 000", "The color of CHECKER zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneCheckerColor, g_szZoneColors[10], 24);
 	StringRGBtoInt(g_szZoneColors[10], g_iZoneColors[10]);
 	HookConVarChange(g_hzoneCheckerColor, OnSettingChanged);
-	
+
 	g_hzoneBonusStartColor = CreateConVar("ck_zone_bonusstartcolor", "000 255 255", "The color of BONUS START zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneBonusStartColor, g_szZoneColors[3], 24);
 	StringRGBtoInt(g_szZoneColors[3], g_iZoneColors[3]);
 	HookConVarChange(g_hzoneBonusStartColor, OnSettingChanged);
-	
+
 	g_hzoneBonusEndColor = CreateConVar("ck_zone_bonusendcolor", "255 000 255", "The color of BONUS END zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneBonusEndColor, g_szZoneColors[4], 24);
 	StringRGBtoInt(g_szZoneColors[4], g_iZoneColors[4]);
 	HookConVarChange(g_hzoneBonusEndColor, OnSettingChanged);
-	
+
 	g_hzoneStageColor = CreateConVar("ck_zone_stagecolor", "000 000 255", "The color of STAGE zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneStageColor, g_szZoneColors[5], 24);
 	StringRGBtoInt(g_szZoneColors[5], g_iZoneColors[5]);
 	HookConVarChange(g_hzoneStageColor, OnSettingChanged);
-	
+
 	g_hzoneCheckpointColor = CreateConVar("ck_zone_checkpointcolor", "000 000 255", "The color of CHECKPOINT zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneCheckpointColor, g_szZoneColors[6], 24);
 	StringRGBtoInt(g_szZoneColors[6], g_iZoneColors[6]);
 	HookConVarChange(g_hzoneCheckpointColor, OnSettingChanged);
-	
+
 	g_hzoneSpeedColor = CreateConVar("ck_zone_speedcolor", "255 000 000", "The color of SPEED zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneSpeedColor, g_szZoneColors[7], 24);
 	StringRGBtoInt(g_szZoneColors[7], g_iZoneColors[7]);
 	HookConVarChange(g_hzoneSpeedColor, OnSettingChanged);
-	
+
 	g_hzoneTeleToStartColor = CreateConVar("ck_zone_teletostartcolor", "255 255 000", "The color of TELETOSTART zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneTeleToStartColor, g_szZoneColors[8], 24);
 	StringRGBtoInt(g_szZoneColors[8], g_iZoneColors[8]);
 	HookConVarChange(g_hzoneTeleToStartColor, OnSettingChanged);
-	
+
 	g_hzoneValidatorColor = CreateConVar("ck_zone_validatorcolor", "255 255 255", "The color of VALIDATOR zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneValidatorColor, g_szZoneColors[9], 24);
 	StringRGBtoInt(g_szZoneColors[9], g_iZoneColors[9]);
 	HookConVarChange(g_hzoneValidatorColor, OnSettingChanged);
-	
+
 	g_hzoneStopColor = CreateConVar("ck_zone_stopcolor", "000 000 000", "The color of CHECKER zones \"red green blue\" from 0 - 255", FCVAR_NOTIFY);
 	GetConVarString(g_hzoneStopColor, g_szZoneColors[0], 24);
 	StringRGBtoInt(g_szZoneColors[0], g_iZoneColors[0]);
 	HookConVarChange(g_hzoneStopColor, OnSettingChanged);
 
 
-	
+
 	g_hAutoVIPFlag = CreateConVar("ck_autovip_flag", "a", "Automatically give players with this admin flag the VIP title. Invalid or not set, disables auto VIP.", FCVAR_NOTIFY);
 	char szFlag[24];
 	AdminFlag bufferFlag;
@@ -1875,7 +1875,7 @@ public void OnPluginStart()
 	else
 		g_AdminMenuFlag = FlagToBit(bufferFlag);
 	HookConVarChange(g_hAdminMenuFlag, OnSettingChanged);
-	
+
 	g_hZoneMenuFlag = CreateConVar("ck_zonemenu_flag", "z", "Admin flag required to open the !zones menu. Invalid or not set, requires flag z. Requires a server restart.", FCVAR_NOTIFY);
 	GetConVarString(g_hZoneMenuFlag, szFlag, 24);
 	validFlag = FindFlagByChar(szFlag[0], bufferFlag);
@@ -1934,7 +1934,7 @@ public void OnPluginStart()
 	RegConsoleCmd("+noclip", NoClip, "[ckSurf] Player noclip on");
 	RegConsoleCmd("-noclip", UnNoClip, "[ckSurf] Player noclip off");
 	RegConsoleCmd("sm_nc", Command_ckNoClip, "[ckSurf] Player noclip on/off");
-	
+
 	// Teleportation commands
 	RegConsoleCmd("sm_stages", Command_SelectStage, "[ckSurf] Opens up the stage selector");
 	RegConsoleCmd("sm_r", Command_Restart, "[ckSurf] Teleports player back to the start");
@@ -1946,18 +1946,18 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_s", Command_ToStage, "[ckSurf] Teleports player to the selected stage");
 	RegConsoleCmd("sm_stage", Command_ToStage, "[ckSurf] Teleports player to the selected stage");
 	RegConsoleCmd("sm_end", Command_ToEnd, "[ckSurf] Teleports player to the end zone");
-	
+
 	// Titles
 	RegConsoleCmd("sm_title", Command_SetTitle, "[ckSurf] Displays player's titles");
 	RegConsoleCmd("sm_titles", Command_SetTitle, "[ckSurf] Displays player's titles");
-	
+
 	if(GetConVarBool(g_hServerVipCommand))
 	{
 		RegConsoleCmd("sm_vip", Command_Vip, "[ckSurf] VIP's commands and effects.");
 		RegConsoleCmd("sm_effects", Command_Vip, "[ckSurf] VIP's commands and effects.");
 		RegConsoleCmd("sm_effect", Command_Vip, "[ckSurf] VIP's commands and effects.");
 	}
-	
+
 	// MISC
 	RegConsoleCmd("sm_tier", Command_Tier, "[ckSurf] Prints information on the current map");
 	RegConsoleCmd("sm_maptier", Command_Tier, "[ckSurf] Prints information on the current map");
@@ -1979,19 +1979,19 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_rs", Command_Teleport, "[ckSurf] Teleports player back to the start of the stage");
 	RegConsoleCmd("sm_play", Command_Teleport, "[ckSurf] Teleports player back to the start");
 	RegConsoleCmd("sm_spawn", Command_Teleport, "[ckSurf] Teleports player back to the start");
-	
+
 	// Player Checkpoints
 	RegConsoleCmd("sm_teleport", Command_goToPlayerCheckpoint, "[ckSurf] Teleports player to his last checkpoint");
 	RegConsoleCmd("sm_tele", Command_goToPlayerCheckpoint, "[ckSurf] Teleports player to his last checkpoint");
 	RegConsoleCmd("sm_prac", Command_goToPlayerCheckpoint, "[ckSurf] Teleports player to his last checkpoint");
 	RegConsoleCmd("sm_practice", Command_goToPlayerCheckpoint, "[ckSurf] Teleports player to his last checkpoint");
-	
+
 	RegConsoleCmd("sm_cp", Command_createPlayerCheckpoint, "[ckSurf] Creates a checkpoint, where the player can teleport back to");
 	RegConsoleCmd("sm_checkpoint", Command_createPlayerCheckpoint, "[ckSurf] Creates a eckpoint, where the player can teleport back to");
 	RegConsoleCmd("sm_undo", Command_undoPlayerCheckpoint, "[ckSurf] Undoes the players lchast checkpoint.");
 	RegConsoleCmd("sm_normal", Command_normalMode, "[ckSurf] Switches player back to normal mode.");
 	RegConsoleCmd("sm_n", Command_normalMode, "[ckSurf] Switches player back to normal mode.");
-	
+
 	RegAdminCmd("sm_ckadmin", Admin_ckPanel, g_AdminMenuFlag, "[ckSurf] Displays the ckSurf menu panel");
 	RegAdminCmd("sm_refreshprofile", Admin_RefreshProfile, g_AdminMenuFlag, "[ckSurf] Recalculates player profile for given steam id");
 	RegAdminCmd("sm_resetchallenges", Admin_DropChallenges, ADMFLAG_ROOT, "[ckSurf] Resets all player challenges (drops table challenges) - requires z flag");
@@ -2012,31 +2012,31 @@ public void OnPluginStart()
 	RegAdminCmd("sm_givetitle", Admin_giveTitle, ADMFLAG_ROOT, "[ckSurf] Gives a player a title");
 	RegAdminCmd("sm_removetitles", Admin_deleteTitles, ADMFLAG_ROOT, "[ckSurf] Removes player's all titles");
 	RegAdminCmd("sm_removetitle", Admin_deleteTitle, ADMFLAG_ROOT, "[ckSurf] Removes specific title from a player");
-	
+
 	RegAdminCmd("sm_addmaptier", Admin_insertMapTier, g_AdminMenuFlag, "[ckSurf] Changes maps tier");
 	RegAdminCmd("sm_amt", Admin_insertMapTier, g_AdminMenuFlag, "[ckSurf] Changes maps tier");
 	RegAdminCmd("sm_addspawn", Admin_insertSpawnLocation, g_AdminMenuFlag, "[ckSurf] Changes the position !r takes players to");
 	RegAdminCmd("sm_delspawn", Admin_deleteSpawnLocation, g_AdminMenuFlag, "[ckSurf] Removes custom !r position");
 	RegAdminCmd("sm_clearassists", Admin_ClearAssists, g_AdminMenuFlag, "[ckSurf] Clears assist points (map progress) from all players");
-	
-	
+
+
 	//chat command listener
 	AddCommandListener(Say_Hook, "say");
 	HookUserMessage(GetUserMessageId("SayText2"), SayText2, true);
 	AddCommandListener(Say_Hook, "say_team");
-	
+
 	//exec ckSurf.cfg
 	AutoExecConfig(true, "ckSurf");
-	
+
 	//mic
 	g_ownerOffset = FindSendPropInfo("CBaseCombatWeapon", "m_hOwnerEntity");
 	g_ragdolls = FindSendPropInfo("CCSPlayer", "m_hRagdoll");
-	
+
 	//add to admin menu
 	Handle tpMenu;
 	if (LibraryExists("adminmenu") && ((tpMenu = GetAdminTopMenu()) != null))
 		OnAdminMenuReady(tpMenu);
-	
+
 	//hooks
 	HookEvent("player_spawn", Event_OnPlayerSpawn, EventHookMode_Post);
 	HookEvent("player_death", Event_OnPlayerDeath);
@@ -2046,27 +2046,27 @@ public void OnPluginStart()
 	HookEvent("weapon_fire", Event_OnFire, EventHookMode_Pre);
 	HookEvent("player_team", Event_OnPlayerTeam, EventHookMode_Post);
 	HookEvent("player_disconnect", Event_PlayerDisconnect, EventHookMode_Pre);
-	
+
 	//mapcycle array
 	int arraySize = ByteCountToCells(PLATFORM_MAX_PATH);
 	g_MapList = CreateArray(arraySize);
-	
-	//add command listeners	
+
+	//add command listeners
 	AddCommandListener(Command_JoinTeam, "jointeam");
 	AddCommandListener(Command_ext_Menu, "radio1");
 	AddCommandListener(Command_ext_Menu, "radio2");
 	AddCommandListener(Command_ext_Menu, "radio3");
-	
+
 	//hook radio commands
 	for (int g; g < sizeof(RadioCMDS); g++)
 		AddCommandListener(BlockRadio, RadioCMDS[g]);
-	
+
 	//button sound hook
 	//AddNormalSoundHook(NormalSHook_callback);
-	
+
 	//nav files
 	CreateNavFiles();
-	
+
 	// Botmimic 2
 	// https://forums.alliedmods.net/showthread.php?t=180114
 	// Optionally setup a hook on CBaseEntity::Teleport to keep track of sudden place changes
@@ -2083,7 +2083,7 @@ public void OnPluginStart()
 	CloseHandle(hGameData);
 	if (iOffset == -1)
 		return;
-	
+
 	if (LibraryExists("dhooks"))
 	{
 		g_hTeleport = DHookCreate(iOffset, HookType_Entity, ReturnType_Void, ThisPointer_CBaseEntity, DHooks_OnTeleport);
@@ -2094,17 +2094,17 @@ public void OnPluginStart()
 		DHookAddParam(g_hTeleport, HookParamType_VectorPtr);
 		DHookAddParam(g_hTeleport, HookParamType_Bool);
 	}
-	
+
 	// Forwards
 	g_MapFinishForward = CreateGlobalForward("ckSurf_OnMapFinished", ET_Event, Param_Cell, Param_Float, Param_String, Param_Cell, Param_Cell);
 	g_BonusFinishForward = CreateGlobalForward("ckSurf_OnBonusFinished", ET_Event, Param_Cell, Param_Float, Param_String, Param_Cell, Param_Cell, Param_Cell);
 	g_PracticeFinishForward = CreateGlobalForward("ckSurf_OnPracticeFinished", ET_Event, Param_Cell, Param_Float, Param_String);
-	
+
 	if (g_bLateLoaded)
 	{
 		CreateTimer(3.0, LoadPlayerSettings, INVALID_HANDLE, TIMER_FLAG_NO_MAPCHANGE);
 	}
-	
+
 	Format(szWHITE, 12, "%c", WHITE);
 	Format(szDARKRED, 12, "%c", DARKRED);
 	Format(szPURPLE, 12, "%c", PURPLE);
@@ -2121,7 +2121,7 @@ public void OnPluginStart()
 	Format(szPINK, 12, "%c", PINK);
 	Format(szLIGHTRED, 12, "%c", LIGHTRED);
 	Format(szORANGE, 12, "%c", ORANGE);
-} 
+}
 
 /*=====  End of Events  ======*/
 

@@ -39,7 +39,7 @@ public void CL_OnStartTimerPress(int client)
 		if (g_bNewReplay[client] || g_bNewBonus[client]) // Don't allow starting the timer, if players record is being saved
 			return;
 	}
-		
+
 	if (!g_bSpectate[client] && !g_bNoClip[client] && ((GetGameTime() - g_fLastTimeNoClipUsed[client]) > 2.0))
 	{
 		if (g_bActivateCheckpointsOnStart[client])
@@ -58,9 +58,9 @@ public void CL_OnStartTimerPress(int client)
 		g_bMissedMapBest[client] = true;
 		g_bMissedBonusBest[client] = true;
 		g_bTimeractivated[client] = true;
-		
+
 		if (!IsFakeClient(client))
-		{	
+		{
 			// Reset checkpoint times
 			for (int i = 0; i < CPLIMIT; i++)
 				g_fCheckpointTimesNew[g_iClientInZone[client][2]][client][i] = 0.0;
@@ -75,9 +75,9 @@ public void CL_OnStartTimerPress(int client)
 			{
 				if (g_fPersonalRecordBonus[g_iClientInZone[client][2]][client] > 0.0)
 					g_bMissedBonusBest[client] = false;
-				
+
 			}
-			
+
 			// If starting the timer for the first time, print average times
 			if (g_bFirstTimerStart[client])
 			{
@@ -86,10 +86,10 @@ public void CL_OnStartTimerPress(int client)
 			}
 		}
 	}
-	
+
 	// Play start sound
 	PlayButtonSound(client);
-	
+
 	// Start recording for record bot
 	if ((!IsFakeClient(client) && GetConVarBool(g_hReplayBot)) || (!IsFakeClient(client) && GetConVarBool(g_hBonusBot)))
 	{
@@ -138,14 +138,14 @@ public void CL_OnEndTimerPress(int client)
 		PlayButtonSound(client);
 		return;
 	}
-	
+
 	// If timer is not on, play error sound and return
 	if (!g_bTimeractivated[client])
 	{
 		ClientCommand(client, "play buttons\\button10.wav");
 		return;
 	}
-	
+
 	PlayButtonSound(client);
 
 	// Get runtime and format it to a string
@@ -162,18 +162,18 @@ public void CL_OnEndTimerPress(int client)
 			PrintToChat(client, "[%cCK%c] %c%N %cfinished the bonus with a time of [%c%s%c] in practice mode!", MOSSGREEN, WHITE, MOSSGREEN, client, WHITE, LIGHTBLUE, g_szFinalTime[client], WHITE);
 		else
 			PrintToChat(client, "[%cCK%c] %c%N %cfinished the map with a time of [%c%s%c] in practice mode!", MOSSGREEN, WHITE, MOSSGREEN, client, WHITE, LIGHTBLUE, g_szFinalTime[client], WHITE);
-		
+
 		/* Start function call */
 		Call_StartForward(g_PracticeFinishForward);
-		
+
 		/* Push parameters one at a time */
 		Call_PushCell(client);
 		Call_PushFloat(g_fFinalTime[client]);
 		Call_PushString(g_szFinalTime[client]);
-		
+
 		/* Finish the call, get the result */
 		Call_Finish();
-		
+
 		return;
 	}
 
@@ -208,16 +208,16 @@ public void CL_OnEndTimerPress(int client)
 		g_bMapFirstRecord[client] = false;
 		g_bMapPBRecord[client] = false;
 		g_bMapSRVRecord[client] = false;
-		
+
 		g_OldMapRank[client] = g_MapRank[client];
-		
+
 		diff = g_fPersonalRecord[client] - g_fFinalTime[client];
 		FormatTimeFloat(client, diff, 3, szDiff, sizeof(szDiff));
 		if (diff > 0.0)
 			Format(g_szTimeDifference[client], sizeof(szDiff), "-%s", szDiff);
 		else
 			Format(g_szTimeDifference[client], sizeof(szDiff), "+%s", szDiff);
-				
+
 		// Check for SR, even if there isn't one already
 		if (!g_MapTimesCount || g_fFinalTime[client] < g_fRecordMapTime)
 		{  // New fastest time in map
@@ -236,7 +236,7 @@ public void CL_OnEndTimerPress(int client)
 				}
 				g_bCheckpointRecordFound[zGroup] = true;
 			}
-	
+
 			if (GetConVarBool(g_hReplayBot) && !g_bPositionRestored[client] && !g_bNewReplay[client])
 			{
 				g_bNewReplay[client] = true;
@@ -244,7 +244,7 @@ public void CL_OnEndTimerPress(int client)
 				CreateTimer(3.0, ReplayTimer, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
 			}
 		}
-		
+
 		// Check for personal record
 		if (g_fPersonalRecord[client] <= 0.1)
 		{  // Clients first record
@@ -252,7 +252,7 @@ public void CL_OnEndTimerPress(int client)
 			g_pr_finishedmaps[client]++;
 			g_MapTimesCount++;
 			FormatTimeFloat(1, g_fPersonalRecord[client], 3, g_szPersonalRecord[client], 64);
-			
+
 			g_bMapFirstRecord[client] = true;
 			g_pr_showmsg[client] = true;
 			db_UpdateCheckpoints(client, g_szSteamID[client], zGroup);
@@ -264,15 +264,15 @@ public void CL_OnEndTimerPress(int client)
 			if (GetConVarInt(g_hExtraPoints) > 0)
 				g_pr_multiplier[client] += 1; // Improved time, increase multip (how many times the player finished this map)
 			FormatTimeFloat(1, g_fPersonalRecord[client], 3, g_szPersonalRecord[client], 64);
-			
+
 			g_bMapPBRecord[client] = true;
 			g_pr_showmsg[client] = true;
 			db_UpdateCheckpoints(client, g_szSteamID[client], zGroup);
-			
+
 			db_selectRecord(client);
 
 		}
-		
+
 		if (!g_bMapSRVRecord[client] && !g_bMapFirstRecord[client] && !g_bMapPBRecord[client])
 		{
 			// for ck_min_rank_announce
@@ -298,7 +298,7 @@ public void CL_OnEndTimerPress(int client)
 						db_insertPlayerChallenge(client);
 						GetClientName(i, opponentName, MAX_NAME_LENGTH);
 						PrintToChatAll("%t", "ChallengeW", RED, WHITE, MOSSGREEN, clientName, WHITE, MOSSGREEN, opponentName, WHITE);
-						
+
 						if (g_Challenge_Bet[client] > 0)
 						{
 							int lostpoints = g_Challenge_Bet[client] * g_pr_PointUnit;
@@ -306,7 +306,7 @@ public void CL_OnEndTimerPress(int client)
 							CreateTimer(0.5, UpdatePlayerProfile, i, TIMER_FLAG_NO_MAPCHANGE);
 							g_pr_showmsg[client] = true;
 						}
-						
+
 						break;
 					}
 				}
@@ -338,19 +338,19 @@ public void CL_OnEndTimerPress(int client)
 		g_bBonusFirstRecord[client] = false;
 		g_bBonusPBRecord[client] = false;
 		g_bBonusSRVRecord[client] = false;
-		
+
 		g_OldMapRankBonus[zGroup][client] = g_MapRankBonus[zGroup][client];
-		
+
 		diff = g_fPersonalRecordBonus[zGroup][client] - g_fFinalTime[client];
 		FormatTimeFloat(client, diff, 3, szDiff, sizeof(szDiff));
 		if (diff > 0.0)
 			Format(g_szBonusTimeDifference[client], sizeof(szDiff), "-%s", szDiff);
 		else
 			Format(g_szBonusTimeDifference[client], sizeof(szDiff), "+%s", szDiff);
-		
-		
+
+
 		g_tmpBonusCount[zGroup] = g_iBonusCount[zGroup];
-		
+
 		if (g_iBonusCount[zGroup] > 0)
 		{  // If the server already has a record
 			if (g_fFinalTime[client] < g_fBonusFastest[zGroup])
@@ -359,7 +359,7 @@ public void CL_OnEndTimerPress(int client)
 				g_fBonusFastest[zGroup] = g_fFinalTime[client];
 				Format(g_szBonusFastest[zGroup], MAX_NAME_LENGTH, "%N", client);
 				FormatTimeFloat(1, g_fBonusFastest[zGroup], 3, g_szBonusFastestTime[zGroup], 64);
-				
+
 				// Update Checkpoints
 				if (g_bCheckpointsEnabled[client] && !g_bPositionRestored[client])
 				{
@@ -369,7 +369,7 @@ public void CL_OnEndTimerPress(int client)
 					}
 					g_bCheckpointRecordFound[zGroup] = true;
 				}
-				
+
 				g_bBonusSRVRecord[client] = true;
 				if (GetConVarBool(g_hBonusBot) && !g_bPositionRestored[client] && !g_bNewBonus[client])
 				{
@@ -393,12 +393,12 @@ public void CL_OnEndTimerPress(int client)
 				WritePackCell(pack, GetClientUserId(client));
 				WritePackCell(pack, zGroup);
 			}
-			
+
 			g_fOldBonusRecordTime[zGroup] = g_fBonusFastest[zGroup];
 			g_fBonusFastest[zGroup] = g_fFinalTime[client];
 			Format(g_szBonusFastest[zGroup], MAX_NAME_LENGTH, "%N", client);
 			FormatTimeFloat(1, g_fBonusFastest[zGroup], 3, g_szBonusFastestTime[zGroup], 64);
-			
+
 			// Update Checkpoints
 			if (g_bCheckpointsEnabled[client] && !g_bPositionRestored[client])
 			{
@@ -408,18 +408,18 @@ public void CL_OnEndTimerPress(int client)
 				}
 				g_bCheckpointRecordFound[zGroup] = true;
 			}
-			
+
 			g_bBonusSRVRecord[client] = true;
-			
+
 			g_fOldBonusRecordTime[zGroup] = g_fBonusFastest[zGroup];
 		}
-		
-		
+
+
 		if (g_fPersonalRecordBonus[zGroup][client] == 0.0)
 		{  // Clients first record
 			g_fPersonalRecordBonus[zGroup][client] = g_fFinalTime[client];
 			FormatTimeFloat(1, g_fPersonalRecordBonus[zGroup][client], 3, g_szPersonalRecordBonus[zGroup][client], 64);
-			
+
 			g_bBonusFirstRecord[client] = true;
 			g_pr_showmsg[client] = true;
 			db_UpdateCheckpoints(client, g_szSteamID[client], zGroup);
@@ -429,14 +429,14 @@ public void CL_OnEndTimerPress(int client)
 		{  // client's new record
 			g_fPersonalRecordBonus[zGroup][client] = g_fFinalTime[client];
 			FormatTimeFloat(1, g_fPersonalRecordBonus[zGroup][client], 3, g_szPersonalRecordBonus[zGroup][client], 64);
-			
+
 			g_bBonusPBRecord[client] = true;
 			g_pr_showmsg[client] = true;
 			db_UpdateCheckpoints(client, g_szSteamID[client], zGroup);
 			db_updateBonus(client, g_szSteamID[client], clientName, g_fFinalTime[client], zGroup);
 		}
-		
-		
+
+
 		if (!g_bBonusSRVRecord[client] && !g_bBonusFirstRecord[client] && !g_bBonusPBRecord[client])
 		{
 			db_currentBonusRunRank(client, zGroup);
@@ -448,4 +448,4 @@ public void CL_OnEndTimerPress(int client)
 	//set mvp star
 	g_MVPStars[client] += 1;
 	CS_SetMVPCount(client, g_MVPStars[client]);
-} 
+}

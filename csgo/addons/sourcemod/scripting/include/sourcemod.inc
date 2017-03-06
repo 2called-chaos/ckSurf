@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -85,11 +85,11 @@ enum APLRes
 };
 
 /**
- * Called when the plugin is fully initialized and all known external references 
- * are resolved. This is only called once in the lifetime of the plugin, and is 
+ * Called when the plugin is fully initialized and all known external references
+ * are resolved. This is only called once in the lifetime of the plugin, and is
  * paired with OnPluginEnd().
  *
- * If any run-time error is thrown during this callback, the plugin will be marked 
+ * If any run-time error is thrown during this callback, the plugin will be marked
  * as failed.
  */
 forward void OnPluginStart();
@@ -104,14 +104,14 @@ forward bool AskPluginLoad(Handle myself, bool late, char[] error, int err_max);
 
 /**
  * Called before OnPluginStart, in case the plugin wants to check for load failure.
- * This is called even if the plugin type is "private."  Any natives from modules are 
- * not available at this point.  Thus, this forward should only be used for explicit 
- * pre-emptive things, such as adding dynamic natives, setting certain types of load 
+ * This is called even if the plugin type is "private."  Any natives from modules are
+ * not available at this point.  Thus, this forward should only be used for explicit
+ * pre-emptive things, such as adding dynamic natives, setting certain types of load
  * filters (such as not loading the plugin for certain games).
- * 
+ *
  * @note It is not safe to call externally resolved natives until OnPluginStart().
  * @note Any sort of RTE in this function will cause the plugin to fail loading.
- * @note If you do not return anything, it is treated like returning success. 
+ * @note If you do not return anything, it is treated like returning success.
  * @note If a plugin has an AskPluginLoad2(), AskPluginLoad() will not be called.
  *
  *
@@ -126,8 +126,8 @@ forward APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_ma
 /**
  * Called when the plugin is about to be unloaded.
  *
- * It is not necessary to close any handles or remove hooks in this function.  
- * SourceMod guarantees that plugin shutdown automatically and correctly releases 
+ * It is not necessary to close any handles or remove hooks in this function.
+ * SourceMod guarantees that plugin shutdown automatically and correctly releases
  * all resources.
  */
 forward void OnPluginEnd();
@@ -159,26 +159,26 @@ forward void OnMapStart();
 forward void OnMapEnd();
 
 /**
- * Called when the map has loaded, servercfgfile (server.cfg) has been 
+ * Called when the map has loaded, servercfgfile (server.cfg) has been
  * executed, and all plugin configs are done executing.  This is the best
- * place to initialize plugin functions which are based on cvar data.  
+ * place to initialize plugin functions which are based on cvar data.
  *
- * @note This will always be called once and only once per map.  It will be 
+ * @note This will always be called once and only once per map.  It will be
  * called after OnMapStart().
  */
 forward void OnConfigsExecuted();
 
 /**
- * This is called once, right after OnMapStart() but any time before 
- * OnConfigsExecuted().  It is called after the "exec sourcemod.cfg" 
- * command and all AutoExecConfig() exec commands have been added to 
+ * This is called once, right after OnMapStart() but any time before
+ * OnConfigsExecuted().  It is called after the "exec sourcemod.cfg"
+ * command and all AutoExecConfig() exec commands have been added to
  * the ServerCommand() buffer.
  *
- * If you need to load per-map settings that override default values, 
- * adding commands to the ServerCommand() buffer here will guarantee 
+ * If you need to load per-map settings that override default values,
+ * adding commands to the ServerCommand() buffer here will guarantee
  * that they're set before OnConfigsExecuted().
  *
- * Unlike OnMapStart() and OnConfigsExecuted(), this is not called on 
+ * Unlike OnMapStart() and OnConfigsExecuted(), this is not called on
  * late loads that occur after OnMapStart().
  */
 forward void OnAutoConfigsBuffered();
@@ -190,8 +190,8 @@ forward void OnAutoConfigsBuffered();
 forward void OnServerCfg();
 
 /**
- * Called after all plugins have been loaded.  This is called once for 
- * every plugin.  If a plugin late loads, it will be called immediately 
+ * Called after all plugins have been loaded.  This is called once for
+ * every plugin.  If a plugin late loads, it will be called immediately
  * after OnPluginStart().
  */
 forward void OnAllPluginsLoaded();
@@ -206,7 +206,7 @@ native Handle GetMyHandle();
 /**
  * Returns an iterator that can be used to search through plugins.
  *
- * @return				Handle to iterate with.  Must be closed via 
+ * @return				Handle to iterate with.  Must be closed via
  * 						CloseHandle().
  * @error				Invalid Handle.
  */
@@ -272,13 +272,13 @@ native bool IsPluginDebugging(Handle plugin);
 native bool GetPluginInfo(Handle plugin, PluginInfo info, char[] buffer, int maxlength);
 
 /**
- * Finds a plugin by its order in the list from the "plugins list" server 
- * "sm" command.  You should not use this function to loop through all plugins, 
- * use the iterator instead.  Looping through all plugins using this native 
+ * Finds a plugin by its order in the list from the "plugins list" server
+ * "sm" command.  You should not use this function to loop through all plugins,
+ * use the iterator instead.  Looping through all plugins using this native
  * is O(n^2), whereas using the iterator is O(n).
  *
  * @param order_num		Number of the plugin as it appears in "sm plugins list".
- * @return				Plugin Handle on success, INVALID_HANDLE if no plugin 
+ * @return				Plugin Handle on success, INVALID_HANDLE if no plugin
  *						matches the given number.
  */
 native Handle FindPluginByNumber(int order_num);
@@ -287,13 +287,13 @@ native Handle FindPluginByNumber(int order_num);
  * Causes the plugin to enter a failed state.  An error will be thrown and
  * the plugin will be paused until it is unloaded or reloaded.
  *
- * For backwards compatibility, if no extra arguments are passed, no 
- * formatting is applied.  If one or more additional arguments is passed, 
- * the string is formatted using Format().  If any errors are encountered 
- * during formatting, both the format specifier string and an additional 
+ * For backwards compatibility, if no extra arguments are passed, no
+ * formatting is applied.  If one or more additional arguments is passed,
+ * the string is formatted using Format().  If any errors are encountered
+ * during formatting, both the format specifier string and an additional
  * error message are written.
  *
- * This function does not return, and no further code in the plugin is 
+ * This function does not return, and no further code in the plugin is
  * executed.
  *
  * @param string		Format specifier string.
@@ -323,7 +323,7 @@ native int GetTime(int bigStamp[2]={0,0});
 /**
  * Produces a date and/or time string value for a timestamp.
  *
- * See this URL for valid parameters: 
+ * See this URL for valid parameters:
  * http://cplusplus.com/reference/clibrary/ctime/strftime.html
  *
  * @param buffer		Destination string buffer.
@@ -337,7 +337,7 @@ native void FormatTime(char[] buffer, int maxlength, const char[] format, int st
 /**
  * Loads a game config file.
  *
- * @param file			File to load.  The path must be relative to the 'gamedata' folder under the config folder 
+ * @param file			File to load.  The path must be relative to the 'gamedata' folder under the config folder
  *					and the extension should be omitted.
  * @return			A handle to the game config file or INVALID_HANDLE in failure.
  */
@@ -374,7 +374,7 @@ native bool GameConfGetKeyValue(Handle gc, const char[] key, char[] buffer, int 
 native Address GameConfGetAddress(Handle gameconf, const char[] name);
 
 /**
- * Returns the operating system's "tick count," which is a number of 
+ * Returns the operating system's "tick count," which is a number of
  * milliseconds since the operating system loaded.  This can be used
  * for basic benchmarks.
  *
@@ -384,7 +384,7 @@ native int GetSysTickCount();
 
 /**
  * Specifies that the given config file should be executed after plugin load.
- * OnConfigsExecuted() will not be called until the config file has executed, 
+ * OnConfigsExecuted() will not be called until the config file has executed,
  * but it will be called if the execution fails.
  *
  * @param autoCreate	If true, and the config file does not exist, such a config
@@ -397,7 +397,7 @@ native int GetSysTickCount();
 native void AutoExecConfig(bool autoCreate=true, const char[] name="", const char[] folder="sourcemod");
 
 /**
- * Registers a library name for identifying as a dependency to 
+ * Registers a library name for identifying as a dependency to
  * other plugins.
  *
  * @param name			Library name.
@@ -405,9 +405,9 @@ native void AutoExecConfig(bool autoCreate=true, const char[] name="", const cha
 native void RegPluginLibrary(const char[] name);
 
 /**
- * Returns whether a library exists.  This function should be considered 
- * expensive; it should only be called on plugin to determine availability 
- * of resources.  Use OnLibraryAdded()/OnLibraryRemoved() to detect changes 
+ * Returns whether a library exists.  This function should be considered
+ * expensive; it should only be called on plugin to determine availability
+ * of resources.  Use OnLibraryAdded()/OnLibraryRemoved() to detect changes
  * in optional resources.
  *
  * @param name			Library name of a plugin or extension.
@@ -429,8 +429,8 @@ native bool LibraryExists(const char[] name);
 native int GetExtensionFileStatus(const char[] name, char[] error="", int maxlength=0);
 
 /**
- * Called after a library is added that the current plugin references 
- * optionally. A library is either a plugin name or extension name, as 
+ * Called after a library is added that the current plugin references
+ * optionally. A library is either a plugin name or extension name, as
  * exposed via its include file.
  *
  * @param name			Library name.
@@ -438,8 +438,8 @@ native int GetExtensionFileStatus(const char[] name, char[] error="", int maxlen
 forward void OnLibraryAdded(const char[] name);
 
 /**
- * Called right before a library is removed that the current plugin references 
- * optionally.  A library is either a plugin name or extension name, as 
+ * Called right before a library is removed that the current plugin references
+ * optionally.  A library is either a plugin name or extension name, as
  * exposed via its include file.
  *
  * @param name			Library name.
@@ -453,48 +453,48 @@ forward void OnLibraryRemoved(const char[] name);
 /**
  * Loads a map list to an ADT Array.
  *
- * A map list is a list of maps from a file.  SourceMod allows easy configuration of 
- * maplists through addons/sourcemod/configs/maplists.cfg.  Each entry is given a 
- * name and a file (for example, "rtv" => "rtv.cfg"), or a name and a redirection 
- * (for example, "rtv" => "default").  This native will read a map list entry, 
- * cache the file, and return the list of maps it holds.  
+ * A map list is a list of maps from a file.  SourceMod allows easy configuration of
+ * maplists through addons/sourcemod/configs/maplists.cfg.  Each entry is given a
+ * name and a file (for example, "rtv" => "rtv.cfg"), or a name and a redirection
+ * (for example, "rtv" => "default").  This native will read a map list entry,
+ * cache the file, and return the list of maps it holds.
  *
- * Serial change numbers are used to identify if a map list has changed.  Thus, if 
- * you pass a serial change number and it's equal to what SourceMod currently knows 
+ * Serial change numbers are used to identify if a map list has changed.  Thus, if
+ * you pass a serial change number and it's equal to what SourceMod currently knows
  * about the map list, then SourceMod won't re-parse the file.
  *
- * If the maps end up being read from the maps folder (MAPLIST_FLAG_MAPSFOLDER), they 
+ * If the maps end up being read from the maps folder (MAPLIST_FLAG_MAPSFOLDER), they
  * are automatically sorted in alphabetical, ascending order.
  *
  * Arrays created by this function are temporary and must be freed via CloseHandle().
- * Modifying arrays created by this function will not affect future return values or 
+ * Modifying arrays created by this function will not affect future return values or
  * or the contents of arrays returned to other plugins.
  *
- * @param array			Array to store the map list.  If INVALID_HANDLE, a new blank 
- *						array will be created.  The blocksize should be at least 16; 
- *						otherwise results may be truncated.  Items are added to the array 
- *						as strings.  The array is never checked for duplicates, and it is 
- *						not read beforehand.  Only the serial number is used to detect 
+ * @param array			Array to store the map list.  If INVALID_HANDLE, a new blank
+ *						array will be created.  The blocksize should be at least 16;
+ *						otherwise results may be truncated.  Items are added to the array
+ *						as strings.  The array is never checked for duplicates, and it is
+ *						not read beforehand.  Only the serial number is used to detect
  *						changes.
- * @param serial		Serial number to identify last known map list change.  If -1, the 
- *						the value will not be checked.  If the map list has since changed, 
- *						the serial is updated (even if -1 was passed).  If there is an error 
+ * @param serial		Serial number to identify last known map list change.  If -1, the
+ *						the value will not be checked.  If the map list has since changed,
+ *						the serial is updated (even if -1 was passed).  If there is an error
  *						finding a valid maplist, then the serial is set to -1.
- * @param str			Config name, or "default" for the default map list.  Config names 
- *						should be somewhat descriptive.  For example, the admin menu uses 
- *						a config name of "admin menu".  The list names can be configured 
+ * @param str			Config name, or "default" for the default map list.  Config names
+ *						should be somewhat descriptive.  For example, the admin menu uses
+ *						a config name of "admin menu".  The list names can be configured
  *						by users in addons/sourcemod/configs/maplists.cfg.
  * @param flags			MAPLIST_FLAG flags.
  * @return				On failure:
- *						 INVALID_HANDLE is returned, the serial is set to -1, and the input 
+ *						 INVALID_HANDLE is returned, the serial is set to -1, and the input
  *						 array (if any) is left unchanged.
  *						On no change:
- 						 INVALID_HANDLE is returned, the serial is unchanged, and the input 
+ 						 INVALID_HANDLE is returned, the serial is unchanged, and the input
  						 array (if any) is left unchanged.
  *						On success:
- *						 A valid array Handle is returned, containing at least one map string.  
- *						 If an array was passed, the return value is equal to the passed Array 
- *						 Handle.  If the passed array was not cleared, it will have grown by at 
+ *						 A valid array Handle is returned, containing at least one map string.
+ *						 If an array was passed, the return value is equal to the passed Array
+ *						 Handle.  If the passed array was not cleared, it will have grown by at
  *						 least one item.  The serial number is updated to a positive number.
  * @error				Invalid array Handle that is not INVALID_HANDLE.
  */
@@ -502,10 +502,10 @@ native Handle ReadMapList(Handle array=INVALID_HANDLE,
 						  int &serial=-1,
 						  const char[] str="default",
 						  int flags=MAPLIST_FLAG_CLEARARRAY);
-						  
+
 /**
- * Makes a compatibility binding for map lists.  For example, if a function previously used 
- * "clam.cfg" for map lists, this function will insert a "fake" binding to "clam.cfg" that 
+ * Makes a compatibility binding for map lists.  For example, if a function previously used
+ * "clam.cfg" for map lists, this function will insert a "fake" binding to "clam.cfg" that
  * will be overridden if it's in the maplists.cfg file.
  *
  * @param name			Configuration name that would be used with ReadMapList().
@@ -514,10 +514,10 @@ native Handle ReadMapList(Handle array=INVALID_HANDLE,
 native void SetMapListCompatBind(const char[] name, const char[] file);
 
 /**
- * Called when a client has sent chat text.  This must return either true or 
+ * Called when a client has sent chat text.  This must return either true or
  * false to indicate that a client is or is not spamming the server.
  *
- * The return value is a hint only.  Core or another plugin may decide 
+ * The return value is a hint only.  Core or another plugin may decide
  * otherwise.
  *
  * @param client		Client index.  The server (0) will never be passed.
@@ -526,11 +526,11 @@ native void SetMapListCompatBind(const char[] name, const char[] file);
 forward bool OnClientFloodCheck(int client);
 
 /**
- * Called after a client's flood check has been computed.  This can be used 
+ * Called after a client's flood check has been computed.  This can be used
  * by antiflood algorithms to decay/increase flooding weights.
  *
- * Since the result from "OnClientFloodCheck" isn't guaranteed to be the 
- * final result, it is generally a good idea to use this to play with other 
+ * Since the result from "OnClientFloodCheck" isn't guaranteed to be the
+ * final result, it is generally a good idea to use this to play with other
  * algorithms nicely.
  *
  * @param client		Client index.  The server (0) will never be passed.
@@ -547,7 +547,7 @@ enum FeatureType
 	 * A native function call.
 	 */
 	FeatureType_Native,
-	
+
 	/**
 	 * A named capability. This is distinctly different from checking for a
 	 * native, because the underlying functionality could be enabled on-demand
@@ -567,12 +567,12 @@ enum FeatureStatus
 	 * Feature is available for use.
 	 */
 	FeatureStatus_Available,
-	
+
 	/**
 	 * Feature is not available.
 	 */
 	FeatureStatus_Unavailable,
-	
+
 	/**
 	 * Feature is not known at all.
 	 */
@@ -643,7 +643,7 @@ native int LoadFromAddress(Address addr, NumberType size);
  * @param data          Value to store at the address.
  * @param size          How many bytes should be written.
  */
-native void StoreToAddress(Address addr, int data, NumberType size); 
+native void StoreToAddress(Address addr, int data, NumberType size);
 
 #include <helpers>
 #include <entity>

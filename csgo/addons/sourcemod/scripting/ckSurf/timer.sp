@@ -47,7 +47,7 @@ public Action AnnounceMap(Handle timer, any client)
 	{
 		PrintToChat(client, g_sTierString[0]);
 	}
-	
+
 	AnnounceTimer[client] = null;
 	return Plugin_Handled;
 }
@@ -56,7 +56,7 @@ public Action RefreshAdminMenu(Handle timer, any client)
 {
 	if (IsValidEntity(client) && !IsFakeClient(client))
 		ckAdminMenu(client);
-	
+
 	return Plugin_Handled;
 }
 
@@ -64,7 +64,7 @@ public Action RefreshVIPMenu(Handle timer, any client)
 {
 	if (IsValidEntity(client) && !IsFakeClient(client) && !IsVoteInProgress())
 		Command_Vip(client, 1);
-	
+
 	return Plugin_Handled;
 }
 
@@ -72,7 +72,7 @@ public Action RefreshZoneSettings(Handle timer, any client)
 {
 	if (IsValidEntity(client) && !IsFakeClient(client))
 		ZoneSettings(client);
-	
+
 	return Plugin_Handled;
 }
 
@@ -88,7 +88,7 @@ public Action SetPlayerWeapons(Handle timer, any client)
 			{
 				int offset = GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType", 1)*4;
 	  			int iAmmoTable = FindSendPropInfo("CTFPlayer", "m_iAmmo");
-	  			SetEntData(client, iAmmoTable+offset, 0, 4, true);  
+	  			SetEntData(client, iAmmoTable+offset, 0, 4, true);
   			}*/
 		}
 		if (!g_bStartWithUsp[client])
@@ -98,7 +98,7 @@ public Action SetPlayerWeapons(Handle timer, any client)
 				SetEntPropEnt(client, Prop_Send, "m_hActiveWeapon", weapon);
 		}
 	}
-	
+
 	return Plugin_Handled;
 }
 
@@ -120,7 +120,7 @@ public Action UpdatePlayerProfile(Handle timer, any client)
 {
 	if (IsValidClient(client) && !IsFakeClient(client))
 		db_updateStat(client);
-	
+
 	return Plugin_Handled;
 }
 
@@ -128,7 +128,7 @@ public Action StartTimer(Handle timer, any client)
 {
 	if (IsValidClient(client) && !IsFakeClient(client))
 		CL_OnStartTimerPress(client);
-	
+
 	return Plugin_Handled;
 }
 
@@ -138,7 +138,7 @@ public Action AttackTimer(Handle timer)
 	{
 		if (!IsValidClient(i) || IsFakeClient(i))
 			continue;
-		
+
 		if (g_AttackCounter[i] > 0)
 		{
 			if (g_AttackCounter[i] < 5)
@@ -175,7 +175,7 @@ public Action CKTimer1(Handle timer)
 			}
 			else
 				CenterHudDead(client);
-			
+
 		}
 	}
 	return Plugin_Continue;
@@ -187,7 +187,7 @@ public Action DelayedStuff(Handle timer)
 		ServerCommand("exec sourcemod/ckSurf/main.cfg");
 	else
 		SetFailState("<ckSurf> cfg/sourcemod/ckSurf/main.cfg not found.");
-		
+
 	LoadReplays();
 	LoadInfoBot();
 	return Plugin_Handled;
@@ -197,7 +197,7 @@ public Action CKTimer2(Handle timer)
 {
 	if (g_bRoundEnd)
 		return Plugin_Continue;
-	
+
 	if (GetConVarBool(g_hMapEnd))
 	{
 		Handle hTmp;
@@ -235,27 +235,27 @@ public Action CKTimer2(Handle timer)
 			}
 		}
 	}
-	
+
 	//info bot name
 	SetInfoBotName(g_InfoBot);
-	
+
 	int i;
 	for (i = 1; i <= MaxClients; i++)
 	{
 		if (!IsValidClient(i) || i == g_InfoBot)
 			continue;
-		
+
 		//overlay check
 		if (g_bOverlay[i] && GetGameTime() - g_fLastOverlay[i] > 5.0)
 			g_bOverlay[i] = false;
-		
+
 		//stop replay to prevent server crashes because of a massive recording array (max. 2h)
 		if (g_hRecording[i] != null && g_fCurrentRunTime[i] > 6720.0)
 		{
 			StopRecording(i);
 		}
-		
-		//Scoreboard			
+
+		//Scoreboard
 		if (!g_bPause[i])
 		{
 			float fltime;
@@ -273,12 +273,12 @@ public Action CKTimer2(Handle timer)
 			if (!IsFakeClient(i) && !g_pr_Calculating[i])
 				CreateTimer(0.0, SetClanTag, i, TIMER_FLAG_NO_MAPCHANGE);
 		}
-		
+
 		if (IsPlayerAlive(i))
 		{
 			//spec hud
 			SpecListMenuAlive(i);
-			
+
 			//challenge check
 			if (g_bChallenge_Request[i])
 			{
@@ -290,7 +290,7 @@ public Action CKTimer2(Handle timer)
 					g_bChallenge_Request[i] = false;
 				}
 			}
-			
+
 			//Last Cords & Angles
 			GetClientAbsOrigin(i, g_fPlayerCordsLastPosition[i]);
 			GetClientEyeAngles(i, g_fPlayerAnglesLastPosition[i]);
@@ -298,7 +298,7 @@ public Action CKTimer2(Handle timer)
 		else
 			SpecListMenuDead(i);
 	}
-	
+
 	//clean weapons on ground
 	int maxEntities;
 	maxEntities = GetMaxEntities();
@@ -363,7 +363,7 @@ public Action BonusReplayTimer(Handle timer, Handle pack)
 	else
 		g_bNewBonus[client] = false;
 
-	
+
 	return Plugin_Handled;
 }
 public Action CheckChallenge(Handle timer, any client)
@@ -401,22 +401,22 @@ public Action CheckChallenge(Handle timer, any client)
 		{
 			SetEntityRenderColor(client, 255, 255, 255, 255);
 			g_bChallenge[client] = false;
-			
+
 			//db challenge entry
 			db_insertPlayerChallenge(client);
-			
+
 			//new points
 			g_pr_showmsg[client] = true;
 			CreateTimer(0.5, UpdatePlayerProfile, client, TIMER_FLAG_NO_MAPCHANGE);
-			
+
 			//db opponent
 			Format(szSteamId, 128, "%s", g_szChallenge_OpponentID[client]);
 			RecalcPlayerRank(64, szSteamId);
-			
+
 			//chat msgs
 			if (IsValidClient(client))
 				PrintToChat(client, "%t", "ChallengeWon", RED, WHITE, YELLOW, WHITE);
-			
+
 			return Plugin_Stop;
 		}
 	}
@@ -427,7 +427,7 @@ public Action SetClanTag(Handle timer, any client)
 {
 	if (!IsValidClient(client) || IsFakeClient(client) || g_pr_Calculating[client])
 		return Plugin_Handled;
-	
+
 	/*char buffer[MAX_NAME_LENGTH];
 	if (CS_GetClientClanTag(client, buffer,MAX_NAME_LENGTH) > 0)
 		return Plugin_Handled;
@@ -437,7 +437,7 @@ public Action SetClanTag(Handle timer, any client)
 		CS_SetClientClanTag(client, "");
 		return Plugin_Handled;
 	}
-	
+
 	char old_pr_rankname[128];
 	char tag[154];
 	bool oldrank;
@@ -448,7 +448,7 @@ public Action SetClanTag(Handle timer, any client)
 		Format(old_pr_rankname, 128, "%s", g_pr_rankname[client]);
 	}
 	SetPlayerRank(client);
-	
+
 	if (GetConVarBool(g_hCountry))
 	{
 		Format(tag, 154, "%s | %s", g_szCountryCode[client], g_pr_rankname[client]);
@@ -459,12 +459,12 @@ public Action SetClanTag(Handle timer, any client)
 		if (GetConVarBool(g_hPointSystem) || ((StrEqual(g_pr_rankname[client], "ADMIN", false)) && GetConVarBool(g_hAdminClantag)))
 			CS_SetClientClanTag(client, g_pr_rankname[client]);
 	}
-	
+
 	//new rank
 	if (oldrank && GetConVarBool(g_hPointSystem))
 		if (!StrEqual(g_pr_rankname[client], old_pr_rankname, false) && IsValidClient(client))
 			CPrintToChat(client, "%t", "SkillGroup", MOSSGREEN, WHITE, GRAY, GRAY, g_pr_chat_coloredrank[client]);
-	
+
 	return Plugin_Handled;
 }
 
@@ -480,7 +480,7 @@ public Action WelcomeMsgTimer(Handle timer, any client)
 	GetConVarString(g_hWelcomeMsg, szBuffer, 512);
 	if (IsValidClient(client) && !IsFakeClient(client) && szBuffer[0])
 		CPrintToChat(client, "%s", szBuffer);
-	
+
 	return Plugin_Handled;
 }
 
@@ -488,7 +488,7 @@ public Action HelpMsgTimer(Handle timer, any client)
 {
 	if (IsValidClient(client) && !IsFakeClient(client))
 		PrintToChat(client, "%t", "HelpMsg", MOSSGREEN, WHITE, GREEN, WHITE);
-	
+
 	return Plugin_Handled;
 }
 
@@ -542,7 +542,7 @@ public Action CenterMsgTimer(Handle timer, any client)
 		}
 		g_bRestorePositionMsg[client] = false;
 	}
-	
+
 	return Plugin_Handled;
 }
 

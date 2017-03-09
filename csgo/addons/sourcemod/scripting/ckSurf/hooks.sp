@@ -173,11 +173,11 @@ public Action Event_OnPlayerSpawn(Handle event, const char[] name, bool dontBroa
 			g_specToStage[client] = false;
 		}
 
-		//apply player visibility
-		SetPlayerVisible(client);
-
 		//hide radar
 		CreateTimer(0.0, HideHud, client, TIMER_FLAG_NO_MAPCHANGE);
+
+		//apply player visibility
+		CreateTimer(0.5, SetPlayerVisible, client, TIMER_FLAG_NO_MAPCHANGE);
 
 		//set clantag
 		CreateTimer(1.5, SetClanTag, client, TIMER_FLAG_NO_MAPCHANGE);

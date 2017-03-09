@@ -3145,7 +3145,7 @@ void SetPlayerVisible(int client)
 	// Render weapons opaque too.
 	int iWeapon = -1, iIndex;
 	while((iWeapon = Client_GetNextWeapon(client, iIndex)) != -1)
-		SetEntityOpacity(iWeapon, iAlpha)
+		SetEntityOpacity(iWeapon, iAlpha);
 }
 
 void SetPlayerInvisible(int client)

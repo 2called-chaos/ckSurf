@@ -54,7 +54,6 @@ public Action Event_OnPlayerSpawn(Handle event, const char[] name, bool dontBroa
 		g_bPause[client] = false;
 		g_bFirstTimerStart[client] = true;
 		SetEntityMoveType(client, MOVETYPE_WALK);
-		SetPlayerVisible(client);
 
 		//strip weapons
 		if ((GetClientTeam(client) > 1) && IsValidClient(client))
@@ -173,6 +172,9 @@ public Action Event_OnPlayerSpawn(Handle event, const char[] name, bool dontBroa
 			teleportEntitySafe(client, g_fTeleLocation[client], NULL_VECTOR, view_as<float>( { 0.0, 0.0, -100.0 } ), false);
 			g_specToStage[client] = false;
 		}
+
+		//apply player visibility
+		SetPlayerVisible(client);
 
 		//hide radar
 		CreateTimer(0.0, HideHud, client, TIMER_FLAG_NO_MAPCHANGE);

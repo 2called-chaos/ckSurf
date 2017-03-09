@@ -1356,7 +1356,9 @@ public void OnSettingChanged(Handle convar, const char[] oldValue, const char[] 
 	}
 	else if (convar == g_hCvarPlayerOpacity)
 	{
-		// we must update only if visible but i dunno how...
+		for (int client = 1; client <= MAXPLAYERS; client++)
+			if (IsValidEntity(client) && GetEntityRenderMode(client) != RENDER_NONE)
+				SetPlayerVisible(client);
 	}
 	else if (convar == g_hCleanWeapons)
 	{
@@ -1761,7 +1763,7 @@ public void OnPluginStart()
 	g_hCvarNoBlock = CreateConVar("ck_noblock", "1", "on/off - Player no blocking", FCVAR_NOTIFY, true, 0.0, true, 1.0);
 	HookConVarChange(g_hCvarNoBlock, OnSettingChanged);
 	g_hCvarPlayerOpacity = CreateConVar("ck_player_opacity", "255", "0-255 - Player opacity (0 invisible, 255 fully visible)", FCVAR_NOTIFY, true, 0.0, true, 255.0);
-	// HookConVarChange(g_hCvarPlayerOpacity, OnSettingChanged);
+	HookConVarChange(g_hCvarPlayerOpacity, OnSettingChanged);
 	g_hAdminClantag = CreateConVar("ck_admin_clantag", "1", "on/off - Admin clan tag (necessary flag: b - z)", FCVAR_NOTIFY, true, 0.0, true, 1.0);
 	HookConVarChange(g_hAdminClantag, OnSettingChanged);
 	g_hReplayBot = CreateConVar("ck_replay_bot", "1", "on/off - Bots mimic the local map record", FCVAR_NOTIFY, true, 0.0, true, 1.0);

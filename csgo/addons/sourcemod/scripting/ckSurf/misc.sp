@@ -3169,3 +3169,10 @@ void SetEntityOpacity(int ent, int iAlpha)
 		Entity_SetRenderColor(ent, -1, -1, -1, iAlpha);
 	}
 }
+
+public Action SetPlayerVisibleCallback(Handle timer, any client)
+{
+	if (IsValidClient(client))
+		SetPlayerVisible(client);
+	return Plugin_Handled;
+}

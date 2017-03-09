@@ -3140,7 +3140,7 @@ void resetZone(int zoneIndex)
 void SetPlayerVisible(int client)
 {
 	int iAlpha = GetConVarInt(g_hCvarPlayerOpacity);
-	SetEntityOpacity(client, iAlpha)
+	SetEntityOpacity(client, iAlpha);
 
 	// Render weapons opaque too.
 	int iWeapon = -1, iIndex;

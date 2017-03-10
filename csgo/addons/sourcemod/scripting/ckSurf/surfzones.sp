@@ -557,8 +557,8 @@ stock void TE_SendBeamBoxToClient(int client, float uppercorner[3], float bottom
 	        {
 	            if(j != 7-i)
 	            {
-					// TE_SetupBeamPoints(corners[i], corners[j], ModelIndex, HaloIndex, StartFrame, FrameRate, Life, Width, EndWidth, FadeLength, Amplitude, Color, Speed);
-					// TE_SendToClient(client);
+					TE_SetupBeamPoints(corners[i], corners[j], ModelIndex, HaloIndex, StartFrame, FrameRate, Life, Width, EndWidth, FadeLength, Amplitude, Color, Speed);
+					TE_SendToClient(client);
 				}
 			}
 		}
@@ -624,10 +624,10 @@ stock void TE_SendBeamBoxToClient(int client, float uppercorner[3], float bottom
 
 			for (int i = 0; i < 2; i++) // Connect main corners to the other corners
 			{
-				// TE_SetupBeamPoints(corners[i], corners[2], ModelIndex, HaloIndex, StartFrame, FrameRate, Life, Width, EndWidth, FadeLength, Amplitude, Color, Speed);
-				// TE_SendToClient(client);
-				// TE_SetupBeamPoints(corners[i], corners[3], ModelIndex, HaloIndex, StartFrame, FrameRate, Life, Width, EndWidth, FadeLength, Amplitude, Color, Speed);
-				// TE_SendToClient(client);
+				TE_SetupBeamPoints(corners[i], corners[2], ModelIndex, HaloIndex, StartFrame, FrameRate, Life, Width, EndWidth, FadeLength, Amplitude, Color, Speed);
+				TE_SendToClient(client);
+				TE_SetupBeamPoints(corners[i], corners[3], ModelIndex, HaloIndex, StartFrame, FrameRate, Life, Width, EndWidth, FadeLength, Amplitude, Color, Speed);
+				TE_SendToClient(client);
 			}
 		}
 	}

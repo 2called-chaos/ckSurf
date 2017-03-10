@@ -297,28 +297,31 @@ public Action Say_Hook(int client, const char[] command, int argc)
 			
 			if (GetConVarBool(g_hCountry) && (GetConVarBool(g_hPointSystem) || (StrEqual(g_pr_rankname[client], "ADMIN", false) && GetConVarBool(g_hAdminClantag))))
 			{
+				CSetNextAuthor(client);
 				if (IsPlayerAlive(client))
-					CPrintToChatAllEx(client, "{green}%s{default} %s {teamcolor}%s{default}: %s", g_szCountryCode[client], szChatRank, szName, sText);
+					CPrintToChatAll("{green}%s{default} %s {teamcolor}%s{default}: %s", g_szCountryCode[client], szChatRank, szName, sText);
 				else
-					CPrintToChatAllEx(client, "{green}%s{default} %s {teamcolor}*DEAD* %s{default}: %s", g_szCountryCode[client], szChatRank, szName, sText);
+					CPrintToChatAll("{green}%s{default} %s {teamcolor}*DEAD* %s{default}: %s", g_szCountryCode[client], szChatRank, szName, sText);
 				return Plugin_Handled;
 			}
 			else
 			{
 				if (GetConVarBool(g_hPointSystem) || ((StrEqual(g_pr_rankname[client], "ADMIN", false)) && GetConVarBool(g_hAdminClantag)))
 				{
+					CSetNextAuthor(client);
 					if (IsPlayerAlive(client))
-						CPrintToChatAllEx(client, "%s {teamcolor}%s{default}: %s", szChatRank, szName, sText);
+						CPrintToChatAll("%s {teamcolor}%s{default}: %s", szChatRank, szName, sText);
 					else
-						CPrintToChatAllEx(client, "%s {teamcolor}*DEAD* %s{default}: %s", szChatRank, szName, sText);
+						CPrintToChatAll("%s {teamcolor}*DEAD* %s{default}: %s", szChatRank, szName, sText);
 					return Plugin_Handled;
 				}
 				else if (GetConVarBool(g_hCountry))
 				{
+					CSetNextAuthor(client);
 					if (IsPlayerAlive(client))
-						CPrintToChatAllEx(client, "[{green}%s{default}] {teamcolor}%s{default}: %s", g_szCountryCode[client], szName, sText);
+						CPrintToChatAll("[{green}%s{default}] {teamcolor}%s{default}: %s", g_szCountryCode[client], szName, sText);
 					else
-						CPrintToChatAllEx(client, "[{green}%s{default}] {teamcolor}*DEAD* %s{default}: %s", g_szCountryCode[client], szName, sText);
+						CPrintToChatAll("[{green}%s{default}] {teamcolor}*DEAD* %s{default}: %s", g_szCountryCode[client], szName, sText);
 					return Plugin_Handled;
 				}
 			}
